@@ -10,7 +10,6 @@ class NPuzzle:
     N = 0
     tiles = []
     visited_puzzles = []
-
     
     
     def __init__(self, puzzle):

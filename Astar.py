@@ -20,7 +20,7 @@ class Node:
 if __name__ == '__main__':
 
     
-    puzzle = ((2, 6, 8, 12), (5, 1, 3, 4),(16, 10, 7, 11), (9, 13, 15, 14) )
+    puzzle = ((5, 15, 12, 1), (16, 14, 10, 8), (6, 7, 13, 4), (11, 9, 3, 2))
     puzzleObject = ep.FifteenPuzzle(puzzle)
     root = Node(puzzleObject)
 
@@ -39,7 +39,7 @@ if __name__ == '__main__':
         unvisited = list(filter(lambda child: not child.puzzleObject.puzzle in visited, child_nodes))
         
         for p in unvisited:
-            p.incG()
+            p.G =  1
             p.metric = p.G + p.puzzleObject.heuristic()
 
         # build the queue entries by pre-pending the metric to the node
@@ -50,9 +50,7 @@ if __name__ == '__main__':
         u.puzzleObject.toPrint()
         
     if u.puzzleObject.goal_test():
-        print iteration
-        print "ta-da"
-        print u.metric
+        print '\niterations: ' + str(iteration)
         u.puzzleObject.toPrint()
         print "ta-da"
     else:

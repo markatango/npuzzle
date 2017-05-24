@@ -121,10 +121,11 @@ class FifteenPuzzle:
 if __name__ == '__main__':
     puzzle = [[1,2,3,16],[5,6,7,8],[9,10,11,12],[13,14,15,4]]
     ep = FifteenPuzzle(puzzle)
-    print ep.heuristic()
-    print ep.goal_test()
-    print ep.movable_tiles
-    print np.asarray(ep.puzzle)
+    while True:
+        eps = ep.children()
+        ep = eps[np.random.choice(range(len(eps)))]
+        print ep.puzzle
+        
     
    
     
