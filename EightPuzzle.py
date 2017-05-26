@@ -3,19 +3,19 @@ import random as r
 from itertools import compress
 
 
-class FifteenPuzzle:
+class EightPuzzle:
 
-    goal = ((1,2,3,4),(5,6,7,8),(9,10,11,12),(13,14,15,16))
-    blank = 16
+    goal = [[1,2,3],[4,5,6],[7,8,9]]
+    blank = 9
     N = 0
     tiles = []
     visited_puzzles = []
 
     def __init__(self, puzzle):
         
-        FifteenPuzzle.N = len(puzzle)
-        n_tiles = FifteenPuzzle.N * FifteenPuzzle.N
-        FifteenPuzzle.tiles = [x + 1 for x in range(n_tiles)][:n_tiles-1]
+        EightPuzzle.N = len(puzzle)
+        n_tiles = EightPuzzle.N * EightPuzzle.N
+        EightPuzzle.tiles = [x + 1 for x in range(n_tiles)][:n_tiles-1]
         
         self.puzzle = self.validatePuzzle(puzzle)        
         self.movable_tiles = self.movables()
@@ -37,9 +37,9 @@ class FifteenPuzzle:
         assert isSquare, "Puzzle is not square"
             
         # continguous and distinct
-        indArray = np.array([0 for i in range(FifteenPuzzle.N * FifteenPuzzle.N)])
+        indArray = np.array([0 for i in range(EightPuzzle.N * EightPuzzle.N)])
         
-        for n in range(FifteenPuzzle.N): #0,1,2,3
+        for n in range(EightPuzzle.N): #0,1,2,3
             for c in puzzle[n]:
                 indArray[c-1] = 1
         if all(indArray):
@@ -53,11 +53,11 @@ class FifteenPuzzle:
     def find_row(self, puzzle, tile):
         """Find which row the tile is in. Row numbers start at '1'."""
         res = False
-        for r in range(FifteenPuzzle.N):
+        for r in range(EightPuzzle.N):
             if tile in puzzle[r]:
                 res = r+1
                 break
-        if res > FifteenPuzzle.N:
+        if res > EightPuzzle.N:
             print "can't find tile in puzzle"
         return res
 
@@ -68,8 +68,8 @@ class FifteenPuzzle:
 
     def tile_distance(self, tile):
         """Compute manhattan distance one out of place tile"""
-        return abs(self.find_row(FifteenPuzzle.goal, tile) - self.find_row(self.puzzle, tile)) + \
-               abs(self.find_col(FifteenPuzzle.goal, tile) - self.find_col(self.puzzle, tile))
+        return abs(self.find_row(EightPuzzle.goal, tile) - self.find_row(self.puzzle, tile)) + \
+               abs(self.find_col(EightPuzzle.goal, tile) - self.find_col(self.puzzle, tile))
 
     def distance_between(self, tile1, tile2):
         """Compute manhattan distance between two tiles"""
@@ -78,7 +78,7 @@ class FifteenPuzzle:
                
     def heuristic(self):
         """Compute total manhattan distances of all out of place tiles"""
-        return sum(map(self.tile_distance, FifteenPuzzle.tiles))
+        return sum(map(self.tile_distance, EightPuzzle.tiles))
 
     def goal_test(self):
         """Test if goal has been reached"""
@@ -87,8 +87,8 @@ class FifteenPuzzle:
     def movables(self):
         """Produce list of tiles that can change places with the blank"""
         movable_tiles = []
-        for t in FifteenPuzzle.tiles:
-            if self.distance_between(t, FifteenPuzzle.blank) == 1:
+        for t in EightPuzzle.tiles:
+            if self.distance_between(t, EightPuzzle.blank) == 1:
                 movable_tiles.append(t)
         return movable_tiles
 
@@ -110,18 +110,18 @@ class FifteenPuzzle:
         return tuple(map(tuple, temp_puzzle))
 
     def possiblePuzzles(self):
-        return [self.swapTiles(t1, FifteenPuzzle.blank) for t1 in self.movable_tiles]
+        return [self.swapTiles(t1, EightPuzzle.blank) for t1 in self.movable_tiles]
 
     def children(self):
-        return [FifteenPuzzle(p) for p in self.possiblePuzzles()]
+        return [EightPuzzle(p) for p in self.possiblePuzzles()]
 
    
             
 # ===================================================================================
 
 if __name__ == '__main__':
-    puzzle = ((1,2,3,4),(5,6,7,8),(9,10,11,12),(13,14,15,16))
-    ep = FifteenPuzzle(puzzle)
+    puzzle = ((1,2,3),(4,5,6),(7,8,9))
+    ep = EightPuzzle(puzzle)
     while True:
         eps = ep.children()
         ep = eps[np.random.choice(range(len(eps)))]

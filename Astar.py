@@ -1,64 +1,107 @@
-import FifteenPuzzle as ep
+from FifteenPuzzle import FifteenPuzzle
+from EightPuzzle import EightPuzzle
+
 try:
     import Queue as Q  # ver. < 3.0
 except ImportError:
     import queue as Q
 
-
-
 class Node:
 
-    def __init__(self, puzzleObject):
-        self.puzzleObject = puzzleObject
+    def __init__(self, state, parent):
+        self.parent = parent
+        self.state = state
         self.G = 0
-        self.metric = self.G + self.puzzleObject.heuristic()
-        
-    def incG(self):
-        self.G += 1
+        self.metric = self.G + state.heuristic()
 
-
-if __name__ == '__main__':
-
-    
-    puzzle = ((5, 15, 12, 1), (16, 14, 10, 8), (6, 7, 13, 4), (11, 9, 3, 2))
-    puzzleObject = ep.FifteenPuzzle(puzzle)
-    root = Node(puzzleObject)
-
+def run(state):
     frontier = Q.PriorityQueue()
-    visited = []
+    frontier_metrics = dict()
+    visited_hashes = dict()
+    visited_states = dict()
+
+    root = Node(state, False)
+
     frontier.put((root.metric, root))
+    frontier_metrics[root.state.hash] = root.metric
+    
     iteration = 0
     while not frontier.empty():
-        u = frontier.get()[1] # strip off the queue metric
-        visited.append(u.puzzleObject.puzzle) # store Nodes 
-        if u.puzzleObject.goal_test():
+        u_node = frontier.get()[1]
+        assert frontier_metrics.has_key(u_node.state.hash), "Frontier is missing metric"
+        
+        # Found the goal state?
+        if u_node.state.goal_test():
             break
-
-        # select the unvisited children and update the metrics
-        child_nodes = [Node(p) for p in u.puzzleObject.children()]
-        unvisited = list(filter(lambda child: not child.puzzleObject.puzzle in visited, child_nodes))
         
-        for p in unvisited:
-            p.G =  1
-            p.metric = p.G + p.puzzleObject.heuristic()
+        # test if there is a frontier node with smaller metric. If so, 
+        # get the next node
+        if frontier_metrics[u_node.state.hash] < u_node.metric:
+            continue
 
-        # build the queue entries by pre-pending the metric to the node
-        pentries = zip([p.metric for p in unvisited],[p for p in unvisited])
+        # record this node as 'visited'
+        visited_hashes[u_node.state.hash] = True
+        
+        # gather up the children
+        child_nodes = [Node(p, u_node) for p in u_node.state.children()]
+                    
+        for child_node in child_nodes:
+            
+            # process child if not seen before
+             if not visited_hashes.has_key(child_node.state.hash):
+                child_node.G =  u_node.G + 1
+                child_node.metric = child_node.G + child_node.state.heuristic()
 
-        map(frontier.put, pentries)
+                # if the child is alread in the frontier, check to see which has the lower metric
+                # if the child has a lower metric than the node in the frontier, update the
+                # hash table and store the child (the matching node with the higher metric will be dropped
+                # when tested at the beginning of the while loop)
+                if frontier_metrics.has_key(child_node.state.hash):
+                    if frontier_metrics[child_node.state.hash] > child_node.metric:
+                       # print "metric: " + str(frontier_metrics[child_node.state.hash]) +  " > " + str(child_node.metric)
+                        frontier_metrics[child_node.state.hash] = child_node.metric
+                        frontier.put((child_node.metric, child_node))
+                    # if the child metric is NOT lower than the one in the frontier,  do nothing
+                else:
+                    # if the child is not in the frontier. put it there
+                    frontier_metrics[child_node.state.hash] = child_node.metric
+                    frontier.put((child_node.metric, child_node))
+                    
+        # print str(u_node.G)
+        # u_node.state.toPrint()
         iteration += 1
-        u.puzzleObject.toPrint()
+        #print str(frontier.qsize()) + " : " + str(len(frontier_metrics)) + " : " + str(len(visited_hashes))
+                
+    if u_node.state.goal_test():
+        # print '\niterations: ' + str(iteration)
+        u_node.state.toPrint()
         
-    if u.puzzleObject.goal_test():
-        print '\niterations: ' + str(iteration)
-        u.puzzleObject.toPrint()
-        print "ta-da"
+        print "iterations: " + str(iteration) + " : " + "number of solution steps: " +  str(u_node.metric) 
+
+        # build the solution list
+        solution = Q.LifoQueue()
+        node = u_node
+        while node.parent:
+            solution.put(node.state)
+            node = node.parent
+        while not solution.empty():
+            s = solution.get()
+            s.toPrint()
+        
     else:
         print "Search failed"
 
-    
-    
-        
-        
+## =================================================================
+
+if __name__ == '__main__':
+    puzzle = ((14, 13, 11, 15), (4, 1, 6, 10), (12, 16, 8, 7), (9, 5, 3, 2))
+    state = FifteenPuzzle(puzzle)
+
+
+    #puzzle = ((9, 4, 8), (6, 1, 2), (7, 5, 3))
+    #puzzle = ((2, 3, 8), (1, 6, 5), (9, 4, 7))
+    #state = EightPuzzle(puzzle)
+   
+    run(state)
 
     
