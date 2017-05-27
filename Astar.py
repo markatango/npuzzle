@@ -1,5 +1,6 @@
 from FifteenPuzzle import FifteenPuzzle
 from EightPuzzle import EightPuzzle
+from Solution import solution
 
 try:
     import Queue as Q  # ver. < 3.0
@@ -78,15 +79,7 @@ def run(state):
         
         print "iterations: " + str(iteration) + " : " + "number of solution steps: " +  str(u_node.metric) 
 
-        # build the solution list
-        solution = Q.LifoQueue()
-        node = u_node
-        while node.parent:
-            solution.put(node.state)
-            node = node.parent
-        while not solution.empty():
-            s = solution.get()
-            s.toPrint()
+        solution(u_node)
         
     else:
         print "Search failed"
@@ -99,8 +92,8 @@ if __name__ == '__main__':
 
 
     #puzzle = ((9, 4, 8), (6, 1, 2), (7, 5, 3))
-    #puzzle = ((2, 3, 8), (1, 6, 5), (9, 4, 7))
-    #state = EightPuzzle(puzzle)
+    puzzle = ((2, 3, 8), (1, 6, 5), (9, 4, 7))
+    state = EightPuzzle(puzzle)
    
     run(state)
 
