@@ -10,11 +10,14 @@ except ImportError:
 class Node:
 
     def __init__(self, state, parent):
-        self.parent = parent
         self.state = state
+        self.parent = parent
+        self.metric = self.makeMetric()
+        
+    def makeMetric(self):
         self.G = 0
         self.metric = self.G + state.heuristic()
-
+        
 def run(state):
     frontier = Q.PriorityQueue()
     frontier_metrics = dict()
@@ -73,12 +76,9 @@ def run(state):
         iteration += 1
         #print str(frontier.qsize()) + " : " + str(len(frontier_metrics)) + " : " + str(len(visited_hashes))
                 
-    if u_node.state.goal_test():
-        # print '\niterations: ' + str(iteration)
-        u_node.state.toPrint()
-        
+    if u_node.state.goal_test():       
         print "iterations: " + str(iteration) + " : " + "number of solution steps: " +  str(u_node.metric) 
-
+        print puzzle
         solution(u_node)
         
     else:
@@ -90,9 +90,9 @@ if __name__ == '__main__':
     puzzle = ((14, 13, 11, 15), (4, 1, 6, 10), (12, 16, 8, 7), (9, 5, 3, 2))
     state = FifteenPuzzle(puzzle)
 
-
     #puzzle = ((9, 4, 8), (6, 1, 2), (7, 5, 3))
-    puzzle = ((2, 3, 8), (1, 6, 5), (9, 4, 7))
+    #puzzle = ((2, 3, 8), (1, 6, 5), (9, 4, 7))
+    puzzle = ((6, 1, 2), (9, 4, 8), (7, 5, 3))
     state = EightPuzzle(puzzle)
    
     run(state)
