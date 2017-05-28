@@ -19,7 +19,7 @@ def run(state):
     frontier = Q.PriorityQueue()
     frontier_metrics = dict()
     visited_hashes = dict()
-    visited_states = dict()
+    #visited_states = dict()
 
     root = Node(state, False)
 
@@ -75,7 +75,7 @@ def run(state):
                 
     if u_node.state.goal_test():
         # print '\niterations: ' + str(iteration)
-        u_node.state.toPrint()
+        #u_node.state.toPrint()
         
         print "iterations: " + str(iteration) + " : " + "number of solution steps: " +  str(u_node.metric) 
 
@@ -91,8 +91,8 @@ if __name__ == '__main__':
     state = FifteenPuzzle(puzzle)
 
 
-    #puzzle = ((9, 4, 8), (6, 1, 2), (7, 5, 3))
-    puzzle = ((2, 3, 8), (1, 6, 5), (9, 4, 7))
+    puzzle = ((9, 4, 8), (6, 1, 2), (7, 5, 3))
+    #puzzle = ((2, 3, 8), (1, 6, 5), (9, 4, 7))
     state = EightPuzzle(puzzle)
    
     run(state)
