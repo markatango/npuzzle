@@ -7,6 +7,10 @@ try:
 except ImportError:
     import queue as Q
 
+frontier = Q.LifoQueue()
+frontier_metrics = dict()
+visited_hashes = dict()
+
 class Node:
 
     def __init__(self, state, parent):
@@ -15,39 +19,59 @@ class Node:
         self.G = 0
         self.metric = self.G + state.heuristic()
 
-def DFS(state, limit):
-    return RDFS(Node(state, False), limit)
+def IDFS(limit):
+    return RIDFS(limit)
 
-def RDFS(node, limit):
-    node.state.toPrint()
+
+def RIDFS(limit):
     print limit
-    if state.goal_test():
-        return solution(node)
+    if frontier.empty():
+        return "failure"
+    # get next un-visited node in stack
+    u_node = frontier.get()[1]
+    while visited_hashes.has_key(u_node.state.hash):
+        u_node = frontier.get()[1]
+    # u_node.state.toPrint()
+    visited_hashes[u_node.state.hash] = True
+
+    #print "state.heuristic(): " + str(u_node.state.heuristic()) + " state goal test: " + str(state.goal_test())
+    if u_node.state.goal_test():
+        return solution(u_node)
     
     if limit == 0:
-         cutoff_occurred = True
-         return "cutoff"
+        cutoff_occurred = True
+        return "cutoff"
+
+    # else look athe chilren
     cutoff_occurred = False
     
+    # gather up the children and push them onto the stack
     # gather up the children
-    child_nodes = [Node(p, node) for p in node.state.children()]
+    child_nodes = [Node(p, u_node) for p in u_node.state.children()]
+    #print "parent" + str(u_node.state.puzzle)
+    for c in child_nodes:
+        frontier.put((c.metric, c))
+        #print "child" + str(c.state.puzzle)
                 
-    for child_node in child_nodes:
-        result = RDFS(child_node, limit-1)
-        if result == "cutoff":
-            cutoff_occurred = True
-        else:
-            if not result == "failure":
-                return result
+    result = RIDFS(limit-1)
+    if result == "cutoff":
+        cutoff_occurred = True
+    else:
+        if not result == "failure":
+            return result
     if cutoff_occurred:
         return "cutoff"
     else:
         return "failure"
-            
+        
             
 
 def run(state, limit):
-    DFS(state, limit)
+    root_node = Node(state, False)
+    frontier.put((root_node.metric, root_node))
+    frontier_metrics[root_node.state.hash] = root_node.metric
+    
+    solution = IDFS(limit)
     
     ## =================================================================
 
@@ -56,12 +80,13 @@ if __name__ == '__main__':
     #state = FifteenPuzzle(puzzle)
 
 
-    #puzzle = ((9, 4, 8), (6, 1, 2), (7, 5, 3))
-    puzzle = ((2, 3, 8), (1, 6, 5), (9, 4, 7))
+    puzzle = ((9, 4, 8), (6, 1, 2), (7, 5, 3))
+    #puzzle = ((2, 3, 8), (1, 6, 5), (9, 4, 7))
+    #puzzle = ((1,2,3), (4,5,6), (7,9,8))
     state = EightPuzzle(puzzle)
 
-    limit = 5
-   
+    limit = 600
+    
     run(state, limit)
 
     

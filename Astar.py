@@ -22,8 +22,7 @@ def run(state):
     frontier = Q.PriorityQueue()
     frontier_metrics = dict()
     visited_hashes = dict()
-    #visited_states = dict()
-
+    
     root = Node(state, False)
 
     frontier.put((root.metric, root))
@@ -92,15 +91,11 @@ if __name__ == '__main__':
     puzzle = ((14, 13, 11, 15), (4, 1, 6, 10), (12, 16, 8, 7), (9, 5, 3, 2))
     state = FifteenPuzzle(puzzle)
 
-<<<<<<< HEAD
 
-    puzzle = ((9, 4, 8), (6, 1, 2), (7, 5, 3))
-    #puzzle = ((2, 3, 8), (1, 6, 5), (9, 4, 7))
-=======
     #puzzle = ((9, 4, 8), (6, 1, 2), (7, 5, 3))
     #puzzle = ((2, 3, 8), (1, 6, 5), (9, 4, 7))
     puzzle = ((6, 1, 2), (9, 4, 8), (7, 5, 3))
->>>>>>> 2ca4a8077ef2b3f43b88b93b92f90b26c511e96a
+
     state = EightPuzzle(puzzle)
    
     run(state)
