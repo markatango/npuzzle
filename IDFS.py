@@ -24,7 +24,6 @@ def IDFS(limit):
 
 
 def RIDFS(limit):
-    print limit
     if frontier.empty():
         return "failure"
     # get next un-visited node in stack
@@ -34,7 +33,6 @@ def RIDFS(limit):
     # u_node.state.toPrint()
     visited_hashes[u_node.state.hash] = True
 
-    #print "state.heuristic(): " + str(u_node.state.heuristic()) + " state goal test: " + str(state.goal_test())
     if u_node.state.goal_test():
         return solution(u_node)
     
@@ -48,7 +46,6 @@ def RIDFS(limit):
     # gather up the children and push them onto the stack
     # gather up the children
     child_nodes = [Node(p, u_node) for p in u_node.state.children()]
-    #print "parent" + str(u_node.state.puzzle)
     for c in child_nodes:
         frontier.put((c.metric, c))
         #print "child" + str(c.state.puzzle)
@@ -70,7 +67,8 @@ def run(state, limit):
     root_node = Node(state, False)
     frontier.put((root_node.metric, root_node))
     frontier_metrics[root_node.state.hash] = root_node.metric
-    
+
+    print state.puzzle
     solution = IDFS(limit)
     
     ## =================================================================
