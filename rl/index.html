@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sliding Puzzle - Reinforcement Learning</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Sliding Puzzle - Reinforcement Learning</h1>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="puzzleSize">Puzzle Size</label>
+                <select id="puzzleSize">
+                    <option value="3">3x3 (8-puzzle)</option>
+                    <option value="4">4x4 (15-puzzle)</option>
+                    <option value="5">5x5 (24-puzzle)</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <label for="trainingEpisodes">Training Episodes</label>
+                <select id="trainingEpisodes">
+                    <option value="1000">1,000</option>
+                    <option value="5000">5,000</option>
+                    <option value="10000" selected>10,000</option>
+                    <option value="25000">25,000</option>
+                    <option value="50000">50,000</option>
+                </select>
+            </div>
+            
+            <button id="newPuzzleBtn">🔄 New Puzzle</button>
+            <button id="trainBtn">🧠 Train AI</button>
+            <button id="solveBtn" disabled>🎯 Solve Puzzle</button>
+            <button id="stopBtn" disabled>⏹️ Stop</button>
+        </div>
+        
+        <div class="main-grid">
+            <div class="left-panel">
+                <div class="puzzle-container">
+                    <div id="puzzleGrid" class="puzzle-grid">
+                        <!-- Tiles will be generated here -->
+                    </div>
+                    
+                    <div class="status-section">
+                        <div class="status-text">
+                            <span id="statusText">Ready to start</span>
+                            <span id="statusIndicator" class="status-indicator status-idle"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="log-section">
+                    <div id="logContent" class="log-content">
+                        <div class="log-entry info">🎮 Welcome to the Sliding Puzzle RL Demo!</div>
+                        <div class="log-entry">Click "New Puzzle" to generate a puzzle, then "Train AI" to teach it how to solve.</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right-panel">
+                <div class="stats-card">
+                    <h3>📊 Training Statistics</h3>
+                    <div class="stat-item">
+                        <span class="stat-label">Episodes Completed</span>
+                        <span class="stat-value" id="episodeCount">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Success Rate</span>
+                        <span class="stat-value" id="successRate">0%</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Best Solution</span>
+                        <span class="stat-value" id="bestSolution">None</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Q-Table Size</span>
+                        <span class="stat-value" id="qTableSize">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Manual Moves</span>
+                        <span class="stat-value" id="moveCount">0</span>
+                    </div>
+                    
+                    <div class="progress-section">
+                        <h4>Training Progress</h4>
+                        <div class="progress-bar">
+                            <div id="progressFill" class="progress-fill">0%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
