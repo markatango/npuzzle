@@ -30,7 +30,13 @@ def run(state):
     
     iteration = 0
     while not frontier.empty():
-        u_node = frontier.get()[1]
+        # u_node = frontier.get()[1]
+        u_node = frontier.get()
+        print(u_node)
+        print(f"{frontier_metrics.keys()=}")
+        print(dir(frontier_metrics))
+        # print(f"{u_node.state.hash=}")
+        
         assert frontier_metrics.has_key(u_node.state.hash), "Frontier is missing metric"
         
         # Found the goal state?
@@ -78,12 +84,12 @@ def run(state):
 
     if u_node.state.goal_test():       
 
-        print "iterations: " + str(iteration) + " : " + "number of solution steps: " +  str(u_node.metric) 
-        print puzzle
+        print ("iterations: " + str(iteration) + " : " + "number of solution steps: " +  str(u_node.metric)) 
+        print (puzzle)
         solution(u_node)
         
     else:
-        print "Search failed"
+        print ("Search failed")
 
 ## =================================================================
 
@@ -97,7 +103,7 @@ if __name__ == '__main__':
     puzzle = ((6, 1, 2), (9, 4, 8), (7, 5, 3))
     puzzle = ((9, 4, 8), (6, 1, 2), (7, 5, 3))
 
-    state = EightPuzzle(puzzle)
+    # state = EightPuzzle(puzzle)
    
     run(state)
 

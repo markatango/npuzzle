@@ -48,8 +48,7 @@ class FifteenPuzzle:
             
     def toPrint(self):
         """Simple print puzzle"""
-        print self.puzzle
-
+        print (self.puzzle)
     def find_row(self, puzzle, tile):
         """Find which row the tile is in. Row numbers start at '1'."""
         res = False
@@ -58,7 +57,7 @@ class FifteenPuzzle:
                 res = r+1
                 break
         if res > FifteenPuzzle.N:
-            print "can't find tile in puzzle"
+            print ("can't find tile in puzzle")
         return res
 
     def find_col(self, puzzle, tile):
@@ -125,7 +124,7 @@ if __name__ == '__main__':
     while True:
         eps = ep.children()
         ep = eps[np.random.choice(range(len(eps)))]
-        print ep.puzzle
+        print (ep.puzzle)
         
     
    
