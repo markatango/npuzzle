@@ -154,7 +154,8 @@ class SlidingPuzzleAStar {
         this.generateSolvedPuzzle();
         
         // Scale shuffle moves with puzzle size
-        const shuffleMoves = this.size === 3 ? 25 : this.size === 4 ? 50 : 100;
+        // const shuffleMoves = this.size === 3 ? 25 : this.size === 4 ? 50 : 100;
+        const shuffleMoves = this.size === 3 ? 25 : this.size === 4 ? 50 : this.size === 5 ? 50 : 200;
         this.shufflePuzzle(shuffleMoves);
         
         this.moveCount = 0;
